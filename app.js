@@ -1,37 +1,38 @@
-// Get references to elements
-const productButtons = document.querySelectorAll('.product-button');
-const mainContent = document.querySelector('main');
-const displayText = document.getElementById('display-text');
-const backButton = document.getElementById('back-button');
-
-// Add event listeners to product buttons
-productButtons.forEach(button => {
+document.querySelectorAll('.product-button').forEach(button => {
   button.addEventListener('click', () => {
-    // Get button text
-    const buttonText = button.textContent;
-
-    // Hide main content and display the button text
-    mainContent.style.display = 'none';
-    displayText.textContent = buttonText;
-    displayText.style.display = 'block';
-
+    // Hide all elements under the navbar
+    document.querySelector('.main-content').style.display = 'none';
+    
     // Show the back button
-    backButton.style.display = 'flex';
-
-    // Change the URL to include the button text
+    const backButton = document.querySelector('.back-button');
+    backButton.style.display = 'block';
+    
+    // Change URL
+    const buttonText = button.innerText.toLowerCase().replace(/\s+/g, '-');
     window.history.pushState({}, '', `/${buttonText}`);
+    
+    // Display the button's text in the center of the screen
+    const message = document.createElement('div');
+    message.className = 'message';
+    message.style.textAlign = 'center';
+    message.style.fontSize = '36px';
+    message.style.marginTop = '100px';
+    message.innerText = button.innerText;
+    
+    document.body.appendChild(message);
   });
 });
 
-// Add event listener to the back button
-backButton.addEventListener('click', () => {
-  // Show the main content again
-  mainContent.style.display = 'block';
-  displayText.style.display = 'none';
-
+// Add event listener for the back button
+document.querySelector('.back-button').addEventListener('click', () => {
+  // Remove the message and show the main content again
+  const message = document.querySelector('.message');
+  if (message) {
+    message.remove();
+  }
+  
+  document.querySelector('.main-content').style.display = 'block';
+  
   // Hide the back button
-  backButton.style.display = 'none';
-
-  // Revert the URL to the previous state
-  window.history.back();
+  document.querySelector('.back-button').style.display = 'none';
 });
